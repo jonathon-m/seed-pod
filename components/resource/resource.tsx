@@ -5,6 +5,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 import { useState } from "react";
+import Image from 'next/image';
+
 
 interface ResourceProps {
     url: string
@@ -61,7 +63,7 @@ export default function Resource({ url, prefix, setFile, selectedFile, isRoot = 
                 }
                 { isPublic &&
                     <span className="inline-flex items-baseline w-4">
-                        <img className="invert" src="globe.svg"/>
+                        <Image className="invert" src="globe.svg" alt="Globe icon" width={20} height={20}/>
                     </span>
                 }
         </div>

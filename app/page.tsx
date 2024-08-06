@@ -1,17 +1,11 @@
 'use client'
 
-import {
-  login,
-  logout,
-  handleIncomingRedirect,
-} from "@inrupt/solid-client-authn-browser";
-
-
 import { useEffect } from "react";
 import ResourceView from "@/components/resourceView/resourceView";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getPods, getWebId, handleRedirectAfterLogin } from "@/solid/queries";
 import { handleLogout, loginToSelectedIdp } from "@/solid/mutations";
+import Image from 'next/image';
 
 const SELECTED_IDP = "https://login.inrupt.com/"
 
@@ -21,9 +15,9 @@ export default function Home() {
 
   const { data: sessionId, isLoading: isLoadingSession } = useQuery({ queryKey: ['session'], queryFn: handleRedirectAfterLogin })
 
-  const { data: webId } = useQuery({ queryKey: ['webId', sessionId], queryFn: getWebId })
+  const { data: webId, isLoading: isLoadingWebId } = useQuery({ queryKey: ['webId', sessionId], queryFn: getWebId })
 
-  const { data: pods, isLoading: isLoadingPods  } = useQuery({
+  const { data: pods, isLoading: isLoadingPods } = useQuery({
     queryKey: ['pods', webId],
     queryFn: ({ queryKey }) => getPods(queryKey[1] as string),
     enabled: !!webId
@@ -53,7 +47,7 @@ export default function Home() {
       <div className="w-screen bg-gray-500 flex flex-row place-content-center gap-4 p-2 pl-4 pr-4">
         <div className='flex flex-grow gap-4'>
           <span className="inline-flex items-baseline w-4">
-            <img className="invert" src="seedpod.svg" />
+            <Image className="invert" src="seedpod.svg" alt="SeedPod logo" width={20} height={20}/>
           </span>
           {pods && pods.length > 0 && pods[0]}
         </div>
@@ -74,7 +68,7 @@ export default function Home() {
         {pods && pods.length > 0 ?
           <ResourceView pod={pods[0]} /> :
           <div className="m-4 w-full text-center mt-[30vh]">
-            { (isLoadingSession || isLoadingPods) ? <button>Looking for pods..<span className="animate-blink">.</span></button> :
+            { (isLoadingSession || isLoadingPods || isLoadingWebId) ? <button>Loading pods..<span className="animate-blink">.</span></button> :
               <>{loginMut.isPending ?        
                 <button>
                     Logging in..<span className="animate-blink">.</span>
