@@ -44,12 +44,10 @@ export default function Home() {
   return (
     <main className="min-h-screen max-h-screen font-mono text-sm">
 
-      <div className="w-screen bg-gray-500 flex flex-row place-content-center gap-4 p-2 pl-4 pr-4">
-        <div className='flex flex-grow gap-4'>
-          <span className="inline-flex items-baseline w-4">
-            <Image className="invert" src="seedpod.svg" alt="SeedPod logo" width={20} height={20}/>
-          </span>
-          {pods && pods.length > 0 && pods[0]}
+      <div className="w-full bg-gray-500 flex flex-row place-content-center gap-4 p-2 pl-4 pr-4">
+        <div className='flex flex-grow gap-4 overflow-hidden text-nowrap'>
+            <Image className="invert" src="seedpod.svg" alt="SeedPod logo" width={15} height={15}/>
+          <div className="hidden md:block">{pods && pods.length > 0 && pods[0]}</div>
         </div>
         {webId ? <>
           <div className="flex">{webId.split('/').pop()}</div>
@@ -64,10 +62,10 @@ export default function Home() {
         }
       </div>
 
-      <div className="flex grow w-full h-[calc(100vh-2.5rem)]">
+      <div className="flex grow flex-col md:flex-row w-full h-[calc(100vh-2.5rem)]">
         {pods && pods.length > 0 ?
           <ResourceView pod={pods[0]} /> :
-          <div className="m-4 w-full text-center mt-[30vh]">
+          <div className="text-center mt-[30vh] w-full">
             { (isLoadingSession || isLoadingPods || isLoadingWebId) ? <button>Loading pods..<span className="animate-blink">.</span></button> :
               <>{loginMut.isPending ?        
                 <button>

@@ -20,10 +20,12 @@ const config: Config = {
         }
       },
       animation: {
-        blink: 'blink 2s step-start infinite',
+        blink: 'blink 1s step-start infinite',
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 };
 export default config;

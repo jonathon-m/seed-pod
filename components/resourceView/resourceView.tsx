@@ -13,7 +13,7 @@ export default function ResourceView({ pod }: ResourceViewProps) {
 
     const [selectedFile, setSelectedFile] = useState<string | undefined>(pod)
 
-    const { data: fileData, isError, isPending } = useQuery({ 
+    const { data: fileData, isError, isFetching } = useQuery({ 
         queryKey: ['file', selectedFile],
         queryFn: ({queryKey}) => getFileContents(queryKey[1] as string),
         enabled: !!selectedFile && selectedFile != pod,
@@ -25,7 +25,7 @@ export default function ResourceView({ pod }: ResourceViewProps) {
                 <div className="border-b-2 mb-2 p-2">
                     <Actions url={selectedFile}/>
                 </div>
-                <ul className="flex-grow">
+                <ul className="max-h-40 md:max-h-[unset] overflow-auto scrollbar scrollbar-track-gray-600 scrollbar-thumb-gray-200">
                     <li key={pod}>
                     <Resource 
                     url={pod} 
@@ -35,18 +35,15 @@ export default function ResourceView({ pod }: ResourceViewProps) {
                     selectedFile={selectedFile}/>
                     </li>
                 </ul>
-                <div className="p-2 border-t-2 bg-gray-400">
-                   
-                </div>
             </div>
-            <div className="flex flex-col grow">
+            <div className="flex flex-col grow overflow-hidden">
                 {selectedFile && 
                     <>
                         <div className="p-2 pl-4 bg-gray-700">{selectedFile.replace(pod, '')}</div>
                         <div className="p-4 overflow-auto">
                             <pre className="text-wrap break-all" >
-                                {!isPending && isError ? 'Could not retrieve file contents...' : fileData}
-                                {isPending && <span className="animate-bounce">Loading..<span className="animate-blink">.</span></span>}
+                                {!isFetching && (isError ? 'Could not retrieve file contents...' : fileData)}
+                                {isFetching && <span className="animate-bounce">Loading..<span className="animate-blink">.</span></span>}
                             </pre>
                         </div>
                     </>
