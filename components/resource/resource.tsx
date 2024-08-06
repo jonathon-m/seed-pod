@@ -42,7 +42,7 @@ export default function Resource({ url, prefix, setFile, selectedFile, isRoot = 
     }
 
     return <>
-        {!isRoot && <div
+        <div
             className={"flex flex-row truncate p-2 gap-2" + (selectedFile == url ? " text-sky-400" : "") + (isPending ? " animate-pulse" : "")}>
                 {isContainer(url) ?
                     <span> 
@@ -50,7 +50,7 @@ export default function Resource({ url, prefix, setFile, selectedFile, isRoot = 
                             <span className="pr-2">{expanded ? '⏷' : '⏵'}</span>
                         </button>
                         <button className="hover:text-sky-200" onClick={() => setFile(url)}>
-                            {url.replace(prefix, '')}
+                            {isRoot ? '/' : url.replace(prefix, '')}
                         </button>
                     </span>
 
@@ -65,7 +65,7 @@ export default function Resource({ url, prefix, setFile, selectedFile, isRoot = 
                     </span>
                 }
         </div>
-        }
+        
         {expanded && <ul>{
             contents.map((c) => <li key={c} className="pl-4">
                 <Resource

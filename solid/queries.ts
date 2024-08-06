@@ -4,8 +4,14 @@ import {
     getContainedResourceUrlAll,
     getFile,
   } from "@inrupt/solid-client";
-import { getDefaultSession, fetch } from "@inrupt/solid-client-authn-browser";
+import { getDefaultSession, fetch, handleIncomingRedirect } from "@inrupt/solid-client-authn-browser";
 import { getPublicAccess } from "@inrupt/solid-client/universal";
+
+
+export async function handleRedirectAfterLogin() {
+    const session = await handleIncomingRedirect(); // no-op if not part of login redirect
+    return session?.sessionId
+  }
 
 
 export async function getWebId(): Promise<string> {
